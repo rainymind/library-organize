@@ -1,0 +1,123 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+struct Book {
+    string title;
+    string author;
+    int year;
+};
+
+class Library {
+private:
+    vector<Book> books;
+
+public:
+    void addBook(const Book& newBook) {
+        books.push_back(newBook);
+        cout << "Book added successfully!" << endl;
+    }
+
+    void removeBook(const string& title) {
+        auto it = find_if(books.begin(), books.end(), [&](const Book& b) {
+            return b.title == title;
+        });
+
+        if (it != books.end()) {
+            books.erase(it);
+            cout << "Book removed successfully!" << endl;
+        } else {
+            cout << "Book not found!" << endl;
+        }
+    }
+
+    void searchBook(const string& title) {
+        auto it = find_if(books.begin(), books.end(), [&](const Book& b) {
+            return b.title == title;
+        });
+
+        if (it != books.end()) {
+            cout << "Book found:" << endl;
+            cout << "Title: " << it->title << endl;
+            cout << "Author: " << it->author << endl;
+            cout << "Year: " << it->year << endl;
+        } else {
+            cout << "Book not found!" << endl;
+        }
+    }
+
+    void displayBooks() {
+        if (books.empty()) {
+            cout << "No books in the library." << endl;
+        } else {
+            cout << "Books in the library:" << endl;
+            for (const auto& book : books) {
+                cout << "Title: " << book.title << ", Author: " << book.author << ", Year: " << book.year << endl;
+            }
+        }
+    }
+};
+
+int main() {
+    Library library;
+
+    while (true) {
+        cout << "\nLibrary Management System Menu:" << endl;
+        cout << "1. Add a book" << endl;
+        cout << "2. Remove a book" << endl;
+        cout << "3. Search for a book" << endl;
+        cout << "4. Display all books" << endl;
+        cout << "5. Exit" << endl;
+        cout << "Enter your choice: ";
+        
+        int choice;
+        cin >> choice;
+
+        switch (choice) {
+            case 1: {
+                Book newBook;
+                cout << "Enter book title: ";
+                cin.ignore();
+                getline(cin, newBook.title);
+                cout << "Enter book author: ";
+                getline(cin, newBook.author);
+                cout << "Enter publication year: ";
+                cin >> newBook.year;
+                library.addBook(newBook);
+                break;
+            }
+            case 2: {
+                string title;
+                cout << "Enter the title of the book to remove: ";
+                cin.ignore();
+                getline(cin, title);
+                library.removeBook(title);
+                break;
+            }
+            case 3: {
+                string title;
+                cout << "Enter the title of the book to search for: ";
+                cin.ignore();
+                getline(cin, title);
+                library.searchBook(title);
+                break;
+            }
+            case 4: {
+                library.displayBooks();
+                break;
+            }
+            case 5: {
+                cout << "Exiting the program. Goodbye!" << endl;
+                return 0;
+            }
+            default: {
+                cout << "Invalid choice. Please enter a number from 1 to 5." << endl;
+                break;
+            }
+        }
+    }
+
+    return 0;
+}
